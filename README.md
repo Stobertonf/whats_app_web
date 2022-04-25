@@ -1,16 +1,16 @@
 # whats_app_web
 
-A new Flutter project.
+Seja bem vindo
+👋 Olá, seja bem vindo.
 
-## Getting Started
+Curso
+💻 Projeto do curso Flutter 2.0: Crie aplicações responsivas para a Web do professor Jamilton Damasceno na plataforma Udemy.
 
-This project is a starting point for a Flutter application.
+Escopo
+📚 Neste projeto, eu irei aprender a desenvolver a Interface o Whats App Web utlizando o Dart & Flutter Web.
 
-A few resources to get you started if this is your first Flutter project:
+Foco
+😊 O curso é focado no desenvolvimento de aplicações Web com o Flutter, mas todas as aplicações criadas também irão funcionar para Android e IOS.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Prazo
+⚡ Este projeto foi inciado no dia 24/04/2022, porém, ainda está em desenvolvido. No entanto, em breve espero trazer muitas novidades para este repositório !!!
