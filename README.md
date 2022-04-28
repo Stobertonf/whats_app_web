@@ -18,4 +18,4 @@
 
 ## Prazo
 
-⚡ Este projeto foi iniciado no dia 24/04/2022, porém, ainda está em desenvolvido. No entanto, em breve espero trazer muitas novidades para este repositório !!!
+⚡ Este projeto foi iniciado no dia 24/04/2022, porém, ainda está sendo desenvolvido. No entanto, em breve espero trazer muitas novidades para este repositório !!!
