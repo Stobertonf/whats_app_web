@@ -14,7 +14,7 @@
 
 ## Foco
 
-😊 O curso é focado no desenvolvimento de aplicações Web com o Flutter, mas todas as aplicações criadas também irão funcionar para Android e IOS.
+😊 O curso é focado no desenvolvimento de aplicações Web com o Flutter, mas todas as aplicações criadas também irão funcionar para Android, IOS e Tablets.
 
 ## Prazo
 
