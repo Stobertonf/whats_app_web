@@ -52,6 +52,24 @@ class _LoginState extends State<Login> {
                       width: 500,
                       child: Column(
                         children: [
+                          //Imagem de Perfil
+
+                          //Caixa de texto nome
+                          Visibility(
+                            //É um bool. True fica visível
+                            visible: _cadastroUsuario, //Por padrão é falso
+                            child: TextField(
+                              controller: _controllerNome,
+                              keyboardType: TextInputType.text,
+                              decoration: const InputDecoration(
+                                hintText: "Nome",
+                                labelText: "Nome",
+                                suffixIcon: Icon(
+                                  Icons.person_outline,
+                                ),
+                              ),
+                            ),
+                          ),
                           //Email
                           TextField(
                             controller: _controllerEmail,
