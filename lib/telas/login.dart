@@ -16,6 +16,8 @@ class _LoginState extends State<Login> {
   TextEditingController _controllerSenha =
       TextEditingController(text: "12345678");
 
+  bool _cadastroUsuario = false;
+
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.maybeOf(context).size.height;
@@ -79,6 +81,7 @@ class _LoginState extends State<Login> {
 
                           const SizedBox(height: 20),
 
+                          //botão Login
                           Container(
                             width: double.infinity, //Para ocupar o espaço total
                             child: ElevatedButton(
@@ -92,9 +95,26 @@ class _LoginState extends State<Login> {
                                 ),
                                 child: Text(
                                   "Login",
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  ),
                                 ),
                               ),
                             ),
+                          ),
+                          Row(
+                            children: [
+                              Text("Login"),
+                              Switch(
+                                value: _cadastroUsuario,
+                                onChanged: (bool valor) {
+                                  setState(() {
+                                    _cadastroUsuario = valor;
+                                  });
+                                },
+                              ),
+                              Text("Cadastro"),
+                            ],
                           ),
                         ],
                       ),
