@@ -52,6 +52,49 @@ class _LoginState extends State<Login> {
                       width: 500,
                       child: Column(
                         children: [
+                          //Imagem de Perfil
+                          Visibility(
+                            visible: _cadastroUsuario,
+                            child: ClipOval(
+                              child: Image.asset(
+                                width: 120,
+                                height: 120,
+                                fit: BoxFit.cover,
+                                "images/perfil.png",
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 8,
+                          ),
+
+                          Visibility(
+                            visible: _cadastroUsuario,
+                            child: OutlinedButton(
+                              onPressed: () {},
+                              child: const Text("Seleciona Foto"),
+                            ),
+                          ),
+
+                          const SizedBox(
+                            height: 8,
+                          ),
+                          //Caixa de texto nome
+                          Visibility(
+                            //É um bool. True fica visível
+                            visible: _cadastroUsuario, //Por padrão é falso
+                            child: TextField(
+                              controller: _controllerNome,
+                              keyboardType: TextInputType.text,
+                              decoration: const InputDecoration(
+                                hintText: "Nome",
+                                labelText: "Nome",
+                                suffixIcon: Icon(
+                                  Icons.person_outline,
+                                ),
+                              ),
+                            ),
+                          ),
                           //Email
                           TextField(
                             controller: _controllerEmail,
@@ -89,13 +132,13 @@ class _LoginState extends State<Login> {
                               style: ElevatedButton.styleFrom(
                                 primary: PaletaCores.corPrimaria,
                               ),
-                              child: const Padding(
-                                padding: EdgeInsets.symmetric(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
                                   vertical: 8,
                                 ),
                                 child: Text(
-                                  "Login",
-                                  style: TextStyle(
+                                  _cadastroUsuario ? "Cadastro" : "Login",
+                                  style: const TextStyle(
                                     fontSize: 18,
                                   ),
                                 ),
