@@ -10,7 +10,7 @@
 
 ## Escopo
 
-📚 Neste projeto, eu irei aprender a desenvolver a Interface o Whats App Web utlizando o Dart & Flutter Web.
+📚 Neste projeto, eu irei aprender a desenvolver a Interface do Whats App Web utlizando Dart & Flutter Web e o Firebase.
 
 ## Foco
 
