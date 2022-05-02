@@ -12,7 +12,7 @@ class _LoginState extends State<Login> {
   TextEditingController _controllerNome =
       TextEditingController(text: "Stoberton Francisco");
   TextEditingController _controllerEmail =
-      TextEditingController(text: "stobertof@gmail.com");
+      TextEditingController(text: "stobertonf@gmail.com");
   TextEditingController _controllerSenha =
       TextEditingController(text: "12345678");
 
@@ -20,8 +20,8 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    double alturaTela = MediaQuery.maybeOf(context).size.height;
-    double larguraTela = MediaQuery.maybeOf(context).size.width;
+    double alturaTela = MediaQuery.of(context).size.height;
+    double larguraTela = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Container(
         color: PaletaCores.corFundo,
