@@ -72,7 +72,7 @@ class _LoginState extends State<Login> {
                             visible: _cadastroUsuario,
                             child: OutlinedButton(
                               onPressed: () {},
-                              child: const Text("Seleciona Foto"),
+                              child: const Text("Selecionar Foto"),
                             ),
                           ),
 
