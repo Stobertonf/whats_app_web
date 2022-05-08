@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whats_app_web/telas/home.dart';
 import 'package:whats_app_web/telas/login.dart';
 
 class Rotas {
@@ -18,8 +19,27 @@ class Rotas {
 
       case "/home":
         return MaterialPageRoute(
-          builder: (_) => Login(),
+          builder: (_) => Home(),
         );
     }
+
+    return _erroRota(); //para exibir a mensagem de erro das rotas
+  }
+
+  static Route<dynamic> _erroRota() {
+    return MaterialPageRoute(
+      builder: (_) {
+        return Scaffold(
+          appBar: AppBar(
+            title: const Text(
+              "Tela não encontrada",
+            ),
+          ),
+          body: const Center(
+            child: Text("Tela não encontrada"),
+          ),
+        );
+      },
+    );
   }
 }

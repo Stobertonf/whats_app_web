@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whats_app_web/rotas.dart';
 import 'package:whats_app_web/telas/login.dart';
 
 void main() {
@@ -7,8 +8,8 @@ void main() {
       title: "WhatsApp Web",
       debugShowCheckedModeBanner: false,
       // home: Login(),
-      initialRoute: "/login",
-      onGenerateRoute: Rotas.genarRota,
+      initialRoute: "/",
+      onGenerateRoute: Rotas.gerarRota,
     ),
   );
 }

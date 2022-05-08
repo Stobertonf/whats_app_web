@@ -60,6 +60,7 @@ class _LoginState extends State<Login> {
         usuariosRef.doc("usuario.idUsuario").set(usuario.toMap()).then(
           (value) {
             //Enviando rotas para a tela principal da app
+            Navigator.pushReplacementNamed(context, "/home");
           },
         );
       });
@@ -109,8 +110,7 @@ class _LoginState extends State<Login> {
             password: senha,
           )
               .then((auth) {
-            String? email = auth.user?.email;
-            print("Usuário cadastrado: $email");
+            Navigator.pushReplacementNamed(context, "/home");
           });
         }
       } else {
