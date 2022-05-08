@@ -1,5 +1,7 @@
+import 'dart:typed_data';
 import '../uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
@@ -19,8 +21,17 @@ class _LoginState extends State<Login> {
 
   bool _cadastroUsuario = false;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  Uint8List? _arquivoImagemSelecionado;
 
-  _selecionarImagem() async {}
+  _selecionarImagem() async {
+    //Selecionando o arquivo
+    FilePickerResult? resultado =
+        await FilePicker.platform.pickFiles(type: FileType.image);
+
+    //Recuperando o arquivo
+
+    _arquivoImagemSelecionado = resultado?.files.single.bytes;
+  }
 
   _validarCampos() async {
     String nome = _controllerNome.text;
@@ -105,12 +116,19 @@ class _LoginState extends State<Login> {
                           Visibility(
                             visible: _cadastroUsuario,
                             child: ClipOval(
-                              child: Image.asset(
-                                width: 120,
-                                height: 120,
-                                fit: BoxFit.cover,
-                                "images/perfil.png",
-                              ),
+                              child: _arquivoImagemSelecionado != null
+                                  ? Image.memory(
+                                      width: 120,
+                                      height: 120,
+                                      fit: BoxFit.cover,
+                                      _arquivoImagemSelecionado!,
+                                    )
+                                  : Image.asset(
+                                      width: 120,
+                                      height: 120,
+                                      fit: BoxFit.cover,
+                                      "images/perfil.png",
+                                    ),
                             ),
                           ),
                           const SizedBox(
