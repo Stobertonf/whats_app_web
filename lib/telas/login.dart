@@ -1,5 +1,6 @@
 import '../uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
@@ -20,7 +21,10 @@ class _LoginState extends State<Login> {
   bool _cadastroUsuario = false;
   FirebaseAuth _auth = FirebaseAuth.instance;
 
-  _selecionarImagem() async {}
+  _selecionarImagem() async {
+    FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.image);
+  }
 
   _validarCampos() async {
     String nome = _controllerNome.text;
