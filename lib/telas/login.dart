@@ -45,6 +45,18 @@ class _LoginState extends State<Login> {
           } else {
             print("Nome inválido, digite ao menos 3 caracteres");
           }
+        } else {
+          //Login
+
+          await _auth
+              .signInWithEmailAndPassword(
+            email: email,
+            password: senha,
+          )
+              .then((auth) {
+            String? email = auth.user?.email;
+            print("Usuário cadastrado: $email");
+          });
         }
       } else {
         print("Senha inválida");
