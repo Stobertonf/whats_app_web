@@ -3,6 +3,7 @@ import '../uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -21,6 +22,7 @@ class _LoginState extends State<Login> {
 
   bool _cadastroUsuario = false;
   FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseStorage _storage = FirebaseStorage.instance;
   Uint8List? _arquivoImagemSelecionado;
 
   _selecionarImagem() async {
@@ -30,7 +32,24 @@ class _LoginState extends State<Login> {
 
     //Recuperando o arquivo
 
-    _arquivoImagemSelecionado = resultado?.files.single.bytes;
+    setState(() {
+      _arquivoImagemSelecionado = resultado?.files.single.bytes;
+    });
+  }
+
+  //Upload Imagem
+
+  _uploadImage(String idUsuario) async {
+    Uint8List? arquivoSelecionado = _arquivoImagemSelecionado;
+    if (arquivoSelecionado != null) {
+      Reference imagemPerfilRef = _storage.ref("imagens/perfil/$idUsuario.jpg");
+      UploadTask uploadTask = imagemPerfilRef.putData(arquivoSelecionado);
+
+      uploadTask.whenComplete(() async {
+        String LinkImagem = await uploadTask.snapshot.ref.getDownloadURL();
+        print("Link da imagem: $LinkImagem");
+      });
+    }
   }
 
   _validarCampos() async {
@@ -41,21 +60,30 @@ class _LoginState extends State<Login> {
     if (email.isNotEmpty && email.contains("@")) {
       if (senha.isNotEmpty && senha.length > 6) {
         if (_cadastroUsuario) {
-          //Cadastro
-          if (nome.isNotEmpty && senha.length > 3) {
-            await _auth
-                .createUserWithEmailAndPassword(
-              email: email,
-              password: senha,
-            )
-                .then((auth) {
-              //Upload
+          if (_arquivoImagemSelecionado != null) {
+            //Cadastro
+            if (nome.isNotEmpty && senha.length > 3) {
+              await _auth
+                  .createUserWithEmailAndPassword(
+                email: email,
+                password: senha,
+              )
+                  .then((auth) {
+                //Upload
 
-              String? idUsuario = auth.user?.uid;
-              print("Usuário cadastrado: $idUsuario");
-            });
+                String? idUsuario = auth.user?.uid;
+                if (idUsuario != null) {
+                  _uploadImage(idUsuario);
+                }
+
+                //Recuperando
+                //print("Usuário cadastrado: $idUsuario");
+              });
+            } else {
+              print("Nome inválido, digite ao menos 3 caracteres");
+            }
           } else {
-            print("Nome inválido, digite ao menos 3 caracteres");
+            print("Selecione uma imagem");
           }
         } else {
           //Login
