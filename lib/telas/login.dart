@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +19,40 @@ class _LoginState extends State<Login> {
       TextEditingController(text: "12345678");
 
   bool _cadastroUsuario = false;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  _validarCampos() async {
+    String nome = _controllerNome.text;
+    String email = _controllerEmail.text;
+    String senha = _controllerSenha.text;
+
+    if (email.isNotEmpty && email.contains("@")) {
+      if (senha.isNotEmpty && senha.length > 6) {
+        if (_cadastroUsuario) {
+          //Cadastro
+          if (nome.isNotEmpty && senha.length > 3) {
+            await _auth
+                .createUserWithEmailAndPassword(
+              email: email,
+              password: senha,
+            )
+                .then((auth) {
+              //Upload
+
+              String? idUsuario = auth.user?.uid;
+              print("Usuário cadastrado: $idUsuario");
+            });
+          } else {
+            print("Nome inválido, digite ao menos 3 caracteres");
+          }
+        }
+      } else {
+        print("Senha inválida");
+      }
+    } else {
+      print("E-mail inválido");
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +164,9 @@ class _LoginState extends State<Login> {
                           Container(
                             width: double.infinity, //Para ocupar o espaço total
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                _validarCampos();
+                              },
                               style: ElevatedButton.styleFrom(
                                 primary: PaletaCores.corPrimaria,
                               ),
