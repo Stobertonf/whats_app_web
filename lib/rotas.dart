@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:whats_app_web/telas/home.dart';
 import 'package:whats_app_web/telas/login.dart';
 
 class Rotas {
@@ -18,7 +19,7 @@ class Rotas {
 
       case "/home":
         return MaterialPageRoute(
-          builder: (_) => Login(),
+          builder: (_) => Home(),
         );
     }
   }
