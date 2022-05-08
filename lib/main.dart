@@ -6,7 +6,9 @@ void main() {
     const MaterialApp(
       title: "WhatsApp Web",
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      // home: Login(),
+      initialRoute: "/login",
+      onGenerateRoute: Rotas.genarRota,
     ),
   );
 }
