@@ -7,17 +7,17 @@ class Rotas {
 
     switch (settings.name) {
       case "/":
-        return MatererialPageRoute(
+        return MaterialPageRoute(
           builder: (_) => Login(),
         );
 
       case "/login":
-        return MatererialPageRoute(
+        return MaterialPageRoute(
           builder: (_) => Login(),
         );
 
       case "/home":
-        return MatererialPageRoute(
+        return MaterialPageRoute(
           builder: (_) => Login(),
         );
     }
