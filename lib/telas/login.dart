@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
-
 import '../uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -20,6 +19,8 @@ class _LoginState extends State<Login> {
 
   bool _cadastroUsuario = false;
   FirebaseAuth _auth = FirebaseAuth.instance;
+
+  _selecionarImagem() async {}
 
   _validarCampos() async {
     String nome = _controllerNome.text;
@@ -119,7 +120,7 @@ class _LoginState extends State<Login> {
                           Visibility(
                             visible: _cadastroUsuario,
                             child: OutlinedButton(
-                              onPressed: () {},
+                              onPressed: _selecionarImagem,
                               child: const Text("Selecionar Foto"),
                             ),
                           ),
