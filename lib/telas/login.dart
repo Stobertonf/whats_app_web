@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import '../modelos/usuario.dart';
 import '../uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -25,8 +26,8 @@ class _LoginState extends State<Login> {
   bool _cadastroUsuario = false;
   Uint8List? _arquivoImagemSelecionado;
   FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseFirestore _firebase = FirebaseFirestore.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
+  FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   _selecionarImagem() async {
     //Selecionando o arquivo
@@ -42,15 +43,25 @@ class _LoginState extends State<Login> {
 
   //Upload Imagem
 
-  _uploadImage(String idUsuario) async {
+  _uploadImage(Usuario usuario) async {
     Uint8List? arquivoSelecionado = _arquivoImagemSelecionado;
     if (arquivoSelecionado != null) {
-      Reference imagemPerfilRef = _storage.ref("imagens/perfil/$idUsuario.jpg");
+      Reference imagemPerfilRef =
+          _storage.ref("imagens/perfil/${usuario.idUsuario}.jpg");
       UploadTask uploadTask = imagemPerfilRef.putData(arquivoSelecionado);
 
       uploadTask.whenComplete(() async {
-        String LinkImagem = await uploadTask.snapshot.ref.getDownloadURL();
-        print("Link da imagem: $LinkImagem");
+        String urlImagem = await uploadTask.snapshot.ref.getDownloadURL();
+        usuario.urlImagem = urlImagem;
+
+        //print("Link da imagem: $LinkImagem");
+
+        final usuariosRef = _firestore.collection("usuarios");
+        usuariosRef.doc("usuario.idUsuario").set(usuario.toMap()).then(
+          (value) {
+            //Enviando rotas para a tela principal da app
+          },
+        );
       });
     }
   }
@@ -76,7 +87,8 @@ class _LoginState extends State<Login> {
 
                 String? idUsuario = auth.user?.uid;
                 if (idUsuario != null) {
-                  _uploadImage(idUsuario);
+                  Usuario usuario = Usuario(idUsuario, nome, email);
+                  _uploadImage(usuario);
                 }
 
                 //Recuperando
