@@ -1,8 +1,10 @@
 import 'dart:typed_data';
+
 import '../uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class Login extends StatefulWidget {
@@ -21,9 +23,10 @@ class _LoginState extends State<Login> {
       TextEditingController(text: "12345678");
 
   bool _cadastroUsuario = false;
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseStorage _storage = FirebaseStorage.instance;
   Uint8List? _arquivoImagemSelecionado;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+  FirebaseFirestore _firebase = FirebaseFirestore.instance;
+  FirebaseStorage _storage = FirebaseStorage.instance;
 
   _selecionarImagem() async {
     //Selecionando o arquivo
