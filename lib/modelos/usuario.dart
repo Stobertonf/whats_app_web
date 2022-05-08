@@ -1,15 +1,25 @@
 import 'package:flutter/material.dart';
 
-class Usurio {
+class Usuario {
   String idUsuario;
   String nome;
   String email;
-  String urImagem;
+  String urlImagem;
 
-  Usurio(
+  Usuario(
     this.idUsuario,
     this.nome,
     this.email, {
-    this.urImagem = "",
+    this.urlImagem = "",
   });
+
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = {
+      "idUsuario": this.idUsuario,
+      "nome": this.nome,
+      "email": this.email,
+      "urImagem": this.urlImagem,
+    };
+    return map;
+  }
 }
