@@ -30,7 +30,9 @@ class _LoginState extends State<Login> {
 
     //Recuperando o arquivo
 
-    _arquivoImagemSelecionado = resultado?.files.single.bytes;
+    setState(() {
+      _arquivoImagemSelecionado = resultado?.files.single.bytes;
+    });
   }
 
   _validarCampos() async {
