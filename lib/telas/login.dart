@@ -38,6 +38,9 @@ class _LoginState extends State<Login> {
             )
                 .then((auth) {
               //Upload
+
+              String? idUsuario = auth.user?.uid;
+              print("Usuário cadastrado: $idUsuario");
             });
           } else {
             print("Nome inválido, digite ao menos 3 caracteres");
