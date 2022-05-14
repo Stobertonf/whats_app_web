@@ -21,6 +21,8 @@ class Responsivo extends StatelessWidget {
         Widget? resTablet = this.tablet;
         if (resTablet != null) {
           return resTablet;
+        } else {
+          return web;
         }
       } else {
         return mobile;
