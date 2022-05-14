@@ -9,5 +9,11 @@ class HomeMobile extends StatefulWidget {
 
 class _HomeMobileState extends State<HomeMobile> {
   @override
-  Widget build(BuildContext context) {}
+  Widget build(BuildContext context) {
+    return const Scaffold(
+      body: Text(
+        "Allez, Allez, Allez!!!",
+      ),
+    );
+  }
 }
