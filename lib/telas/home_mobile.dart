@@ -14,7 +14,7 @@ class _HomeMobileState extends State<HomeMobile> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: length,
+      length: 2,
       child: Scaffold(
         appBar: AppBar(
           title: const Text("WhatsApp"),
@@ -36,6 +36,25 @@ class _HomeMobileState extends State<HomeMobile> {
               icon: const Icon(Icons.logout),
             ),
           ],
+          bottom: const TabBar(
+            indicatorColor: Colors.white,
+            indicatorWeight: 4,
+            labelStyle: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+            tabs: [
+              Tab(text: "Conversas"),
+              Tab(text: "Contatos"),
+            ],
+          ),
+        ),
+        body: const SafeArea(
+          child: TabBarView(children: [
+            Center(
+              child: Text("Conversas"),
+            ),
+          ]),
         ),
       ),
     );
