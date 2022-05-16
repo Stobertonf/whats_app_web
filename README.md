@@ -19,3 +19,12 @@
 ## Prazo
 
 ⚡ Este projeto foi iniciado no dia 24/04/2022, porém, ainda está sendo desenvolvido. No entanto, em breve espero trazer muitas novidades para este repositório !!!
+
+## Imagens
+
+:beers: Imagens do projeto.
+
+<p float="left" align="center">
+  <img src=https://i.ibb.co/0t8qbM3/Perfil.jpg width="40%" />
+  <img src=https://i.ibb.co/X8ZMVPX/Perfil-1.jpg width="40%" /> 
+</p>  
