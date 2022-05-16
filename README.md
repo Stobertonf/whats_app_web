@@ -25,7 +25,8 @@
 :beers: Imagens do projeto.
 
 <p float="left" align="center">
-  <img src=https://i.ibb.co/0t8qbM3/Perfil.jpg width="40%" />
-  <img src=https://i.ibb.co/mFfzt38/Perfil-Cadastrar.jpg width="40%" />
   <img src=https://i.ibb.co/vDQ4nG0/Perfil-Login.jpg width="40%" />
+  <img src=https://i.ibb.co/mFfzt38/Perfil-Cadastrar.jpg width="40%" />
+  <img src=https://i.ibb.co/0t8qbM3/Perfil.jpg width="40%" />
+  
 </p>  
