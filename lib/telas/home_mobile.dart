@@ -1,5 +1,8 @@
+import '../modelos/usuario.dart';
 import 'package:flutter/material.dart';
+import '../componentes/lista_contatos.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeMobile extends StatefulWidget {
   const HomeMobile({super.key});
@@ -50,11 +53,19 @@ class _HomeMobileState extends State<HomeMobile> {
           ),
         ),
         body: const SafeArea(
-          child: TabBarView(children: [
-            Center(
-              child: Text("Conversas"),
-            ),
-          ]),
+          child: TabBarView(
+            children: [
+              Center(
+                child: Text("Conversas"),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: 8,
+                ),
+                child: ListaContatos(),
+              ),
+            ],
+          ),
         ),
       ),
     );
