@@ -26,5 +26,4 @@
 
 <p float="left" align="center">
   <img src=https://i.ibb.co/0t8qbM3/Perfil.jpg width="40%" />
-  <img src=https://i.ibb.co/X8ZMVPX/Perfil-1.jpg width="40%" /> 
 </p>  
