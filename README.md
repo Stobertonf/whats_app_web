@@ -22,7 +22,7 @@
 
 ## Imagens
 
-:beers: Imagens do projeto.
+:camera: Imagens do projeto.
 
 <p float="left" align="center">
   <img src=https://i.ibb.co/vDQ4nG0/Perfil-Login.jpg width="40%" />
