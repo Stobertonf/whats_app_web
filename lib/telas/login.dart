@@ -132,8 +132,8 @@ class _LoginState extends State<Login> {
   @override
   void InitState() {
     super.initState(
-      _verificarUsuario();
-    );
+        //_verificarUsuario();
+        );
   }
 
   @override
