@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -12,6 +13,7 @@ class ListaContatos extends StatefulWidget {
 }
 
 class _ListaContatosState extends State<ListaContatos> {
+  late String _idUsuarioLogado;
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
@@ -22,6 +24,7 @@ class _ListaContatosState extends State<ListaContatos> {
 
     for (DocumentSnapshot item in querySnapshot.docs) {
       String idUsuario = item["idUsuario"];
+      if (idUsuario == _idUsuarioLogado) continue;
       String email = item["email"];
       String nome = item["nome"];
       String urlImagem = item["urlImagem"];
@@ -39,63 +42,81 @@ class _ListaContatosState extends State<ListaContatos> {
     return listaUsuarios;
   }
 
+  _recuperarDadosUsuarioLogado() async {
+    User? usuarioAtual = await _auth.currentUser;
+    if (usuarioAtual != null) {
+      _idUsuarioLogado = usuarioAtual.uid;
+    }
+  }
+
   @override
   void initState() {
     super.initState();
+    _recuperarDadosUsuarioLogado;
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Usuario>>(
-        future: _recuperContatos(),
-        builder: (context, snapshot) {
-          switch (snapshot.connectionState) {
-            case const ConnectionState.nome:
-            case ConnectionState.waiting:
-              return Center(
-                child: Column(
-                  children: const [
-                    Text("Carregando contatos"),
-                    CircularProgressIndicator(),
-                  ],
-                ),
+      future: _recuperContatos(),
+      builder: (context, snapshot) {
+        switch (snapshot.connectionState) {
+          case ConnectionState.none:
+          case ConnectionState.waiting:
+            return Center(
+              child: Column(
+                children: const [
+                  Text("Carregando contatos"),
+                  CircularProgressIndicator(),
+                ],
+              ),
+            );
+          case ConnectionState.active:
+          case ConnectionState.done:
+            if (snapshot.hasError) {
+              return const Center(
+                child: Text("Erro ao carregar os dados!"),
               );
-            case ConnectionState.active:
-            case ConnectionState.done:
-              if (snapshot.hasError) {
-                return const Center(
-                  child: Text("Erro ao carregar os dados!"),
-                );
-              } else {
-                List<Usuario>? listaUsuarios = snapshot.data;
-                if(listaUsuarios != null){
-
-                  return ListView.separated(
-                  separatorBuilder: (context, indexe){
+            } else {
+              List<Usuario>? listaUsuarios = snapshot.data;
+              if (listaUsuarios != null) {
+                return ListView.separated(
+                  separatorBuilder: (context, indexe) {
                     return const Divider(
                       color: Colors.grey,
-                      thickness:0.2,
+                      thickness: 0.2,
                     );
                   },
-                   itemCount: listaUsuarios.length,
-                  itemBuilder: (context, indice){
+                  itemCount: listaUsuarios.length,
+                  itemBuilder: (context, indice) {
+                    Usuario usuario = listaUsuarios[indice];
+
                     return ListTile(
                       onTap: () {},
-                      leading: const CircleAvatar(
+                      leading: CircleAvatar(
                         radius: 25,
                         backgroundColor: Colors.grey,
-                        //backgroundImage:,
+                        backgroundImage:
+                            CachedNetworkImageProvider(usuario.urlImagem),
                       ),
-                    );                  
-                    }, 
-                 );
-                }
-                return const Center(
-                  child: Text("Nenhum contato encontrado!"),
+                      title: Text(
+                        usuario.nome,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      contentPadding: const EdgeInsets.all(8),
+                    );
+                  },
                 );
               }
-          }
-        },
-        );
+              return const Center(
+                child: Text("Nenhum contato encontrado!"),
+              );
+            }
+        }
+      },
+    );
   }
 }
