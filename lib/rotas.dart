@@ -1,3 +1,4 @@
+import 'telas/mensagens.dart';
 import 'package:flutter/material.dart';
 import 'package:whats_app_web/telas/home.dart';
 import 'package:whats_app_web/telas/login.dart';
@@ -20,6 +21,11 @@ class Rotas {
       case "/home":
         return MaterialPageRoute(
           builder: (_) => Home(),
+        );
+
+      case "/mensagens":
+        return MaterialPageRoute(
+          builder: (_) => Mensagens(),
         );
     }
 
