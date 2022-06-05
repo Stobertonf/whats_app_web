@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:whats_app_web/modelos/usuario.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class ListaContatos extends StatefulWidget {
-  const ListaContatos({super.key});
+  const ListaContatos({Key? key}) : super(key: key);
 
   @override
-  State<ListaContatos> createState() => _ListaContatosState();
+  _ListaContatosState createState() => _ListaContatosState();
 }
 
 class _ListaContatosState extends State<ListaContatos> {
@@ -17,9 +16,9 @@ class _ListaContatosState extends State<ListaContatos> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  Future<List<Usuario>> _recuperContatos() async {
-    final usarioRef = _firestore.collection("usuario");
-    QuerySnapshot querySnapshot = await usarioRef.get();
+  Future<List<Usuario>> _recuperarContatos() async {
+    final usuarioRef = _firestore.collection("usuarios");
+    QuerySnapshot querySnapshot = await usuarioRef.get();
     List<Usuario> listaUsuarios = [];
 
     for (DocumentSnapshot item in querySnapshot.docs) {
@@ -29,14 +28,14 @@ class _ListaContatosState extends State<ListaContatos> {
       String nome = item["nome"];
       String urlImagem = item["urlImagem"];
 
-      Usuario usario = Usuario(
+      Usuario usuario = Usuario(
         idUsuario,
         nome,
         email,
         urlImagem: urlImagem,
       );
 
-      listaUsuarios.add(usario);
+      listaUsuarios.add(usuario);
     }
 
     return listaUsuarios;
@@ -52,13 +51,13 @@ class _ListaContatosState extends State<ListaContatos> {
   @override
   void initState() {
     super.initState();
-    _recuperarDadosUsuarioLogado;
+    _recuperarDadosUsuarioLogado();
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<Usuario>>(
-      future: _recuperContatos(),
+      future: _recuperarContatos(),
       builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -81,7 +80,7 @@ class _ListaContatosState extends State<ListaContatos> {
               List<Usuario>? listaUsuarios = snapshot.data;
               if (listaUsuarios != null) {
                 return ListView.separated(
-                  separatorBuilder: (context, indexe) {
+                  separatorBuilder: (context, indice) {
                     return const Divider(
                       color: Colors.grey,
                       thickness: 0.2,
@@ -90,7 +89,6 @@ class _ListaContatosState extends State<ListaContatos> {
                   itemCount: listaUsuarios.length,
                   itemBuilder: (context, indice) {
                     Usuario usuario = listaUsuarios[indice];
-
                     return ListTile(
                       onTap: () {},
                       leading: CircleAvatar(
