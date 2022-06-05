@@ -1,5 +1,6 @@
-import '../modelos/usuario.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:whats_app_web/modelos/usuario.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:whats_app_web/componentes/lista_mensagens.dart';
 
@@ -9,13 +10,26 @@ class Mensagens extends StatefulWidget {
   const Mensagens(this.usuarioDestinatario, {Key? key}) : super(key: key);
 
   @override
-  State<Mensagens> createState() => _MensagensState();
+  _MensagensState createState() => _MensagensState();
 }
 
 class _MensagensState extends State<Mensagens> {
+  late Usuario _usuarioRemetente;
   late Usuario _usuarioDestinatario;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
   _recuperarDadosIniciais() {
     _usuarioDestinatario = widget.usuarioDestinatario;
+
+    User? usuarioLogado = _auth.currentUser;
+    if (usuarioLogado != null) {
+      String idUsuario = usuarioLogado.uid;
+      String? nome = usuarioLogado.displayName ?? "";
+      String? email = usuarioLogado.email ?? "";
+      String? urlImagem = usuarioLogado.photoURL ?? "";
+
+      _usuarioRemetente = Usuario(idUsuario, nome, email, urlImagem: urlImagem);
+    }
   }
 
   @override
@@ -42,7 +56,10 @@ class _MensagensState extends State<Mensagens> {
             ),
             Text(
               _usuarioDestinatario.nome,
-              style: const TextStyle(color: Colors.white, fontSize: 16),
+              style: TextStyle(
+                fontSize: 16,
+                color: Colors.white,
+              ),
             )
           ],
         ),
@@ -56,7 +73,10 @@ class _MensagensState extends State<Mensagens> {
         ],
       ),
       body: SafeArea(
-        child: ListaMensagens(),
+        child: ListaMensagens(
+          usuarioRemetente: _usuarioRemetente,
+          usuarioDestinatario: _usuarioDestinatario,
+        ),
       ),
     );
   }
