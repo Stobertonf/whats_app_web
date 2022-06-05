@@ -29,7 +29,7 @@ class _LoginState extends State<Login> {
   FirebaseStorage _storage = FirebaseStorage.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  _verificaUsuarioLogado() async {
+  _verificarUsuarioLogado() async {
     User? usuarioLogado = await _auth.currentUser;
 
     if (usuarioLogado != null) {
@@ -131,9 +131,8 @@ class _LoginState extends State<Login> {
 
   @override
   void InitState() {
-    super.initState(
-        //_verificarUsuario();
-        );
+    super.initState();
+    _verificarUsuarioLogado();
   }
 
   @override
