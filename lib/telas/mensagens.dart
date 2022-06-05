@@ -1,6 +1,7 @@
 import '../modelos/usuario.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:whats_app_web/componentes/lista_mensagens.dart';
 
 class Mensagens extends StatefulWidget {
   final Usuario usuarioDestinatario;
@@ -55,7 +56,7 @@ class _MensagensState extends State<Mensagens> {
         ],
       ),
       body: SafeArea(
-        child: Container(),
+        child: ListaMensagens(),
       ),
     );
   }
