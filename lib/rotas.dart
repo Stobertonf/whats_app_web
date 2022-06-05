@@ -1,8 +1,8 @@
 import 'modelos/usuario.dart';
-import 'telas/mensagens.dart';
 import 'package:flutter/material.dart';
 import 'package:whats_app_web/telas/home.dart';
 import 'package:whats_app_web/telas/login.dart';
+import 'package:whats_app_web/telas/mensagens.dart';
 
 class Rotas {
   static Route<dynamic> gerarRota(RouteSettings settings) {

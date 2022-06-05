@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import '../modelos/usuario.dart';
 import '../uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,7 @@ class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  _LoginState createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
@@ -22,15 +21,14 @@ class _LoginState extends State<Login> {
       TextEditingController(text: "stobertonf@gmail.com");
   TextEditingController _controllerSenha =
       TextEditingController(text: "12345678");
-
   bool _cadastroUsuario = false;
   Uint8List? _arquivoImagemSelecionado;
   FirebaseAuth _auth = FirebaseAuth.instance;
   FirebaseStorage _storage = FirebaseStorage.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  _verificaUsuarioLogado() async {
-    User? usuarioLogado = await _auth.currentUser;
+  _verificarUsuarioLogado() {
+    User? usuarioLogado = _auth.currentUser;
 
     if (usuarioLogado != null) {
       Navigator.pushReplacementNamed(context, "/home");
@@ -43,15 +41,13 @@ class _LoginState extends State<Login> {
         await FilePicker.platform.pickFiles(type: FileType.image);
 
     //Recuperando o arquivo
-
     setState(() {
       _arquivoImagemSelecionado = resultado?.files.single.bytes;
     });
   }
 
   //Upload Imagem
-
-  _uploadImage(Usuario usuario) async {
+  _uploadImagem(Usuario usuario) {
     Uint8List? arquivoSelecionado = _arquivoImagemSelecionado;
     if (arquivoSelecionado != null) {
       Reference imagemPerfilRef =
@@ -62,15 +58,15 @@ class _LoginState extends State<Login> {
         String urlImagem = await uploadTask.snapshot.ref.getDownloadURL();
         usuario.urlImagem = urlImagem;
 
-        //print("Link da imagem: $LinkImagem");
+        //Atualiza url e nome nos dados do usuário
+        await _auth.currentUser?.updateDisplayName(usuario.nome);
+        await _auth.currentUser?.updatePhotoURL(usuario.urlImagem);
 
         final usuariosRef = _firestore.collection("usuarios");
-        usuariosRef.doc("usuario.idUsuario").set(usuario.toMap()).then(
-          (value) {
-            //Enviando rotas para a tela principal da app
-            Navigator.pushReplacementNamed(context, "/home");
-          },
-        );
+        usuariosRef.doc(usuario.idUsuario).set(usuario.toMap()).then((value) {
+          //Enviando rotas para a tela principal da app
+          Navigator.pushReplacementNamed(context, "/home");
+        });
       });
     }
   }
@@ -85,22 +81,16 @@ class _LoginState extends State<Login> {
         if (_cadastroUsuario) {
           if (_arquivoImagemSelecionado != null) {
             //Cadastro
-            if (nome.isNotEmpty && senha.length > 3) {
+            if (nome.isNotEmpty && nome.length >= 3) {
               await _auth
-                  .createUserWithEmailAndPassword(
-                email: email,
-                password: senha,
-              )
+                  .createUserWithEmailAndPassword(email: email, password: senha)
                   .then((auth) {
                 //Upload
-
                 String? idUsuario = auth.user?.uid;
                 if (idUsuario != null) {
                   Usuario usuario = Usuario(idUsuario, nome, email);
-                  _uploadImage(usuario);
+                  _uploadImagem(usuario);
                 }
-
-                //Recuperando
                 //print("Usuário cadastrado: $idUsuario");
               });
             } else {
@@ -111,13 +101,13 @@ class _LoginState extends State<Login> {
           }
         } else {
           //Login
-
           await _auth
               .signInWithEmailAndPassword(
             email: email,
             password: senha,
           )
               .then((auth) {
+            //tela principal
             Navigator.pushReplacementNamed(context, "/home");
           });
         }
@@ -130,10 +120,9 @@ class _LoginState extends State<Login> {
   }
 
   @override
-  void InitState() {
-    super.initState(
-        //_verificarUsuario();
-        );
+  void initState() {
+    super.initState();
+    _verificarUsuarioLogado();
   }
 
   @override
@@ -170,7 +159,7 @@ class _LoginState extends State<Login> {
                       width: 500,
                       child: Column(
                         children: [
-                          //Imagem de Perfil
+                          //Imagem perfil com botão
                           Visibility(
                             visible: _cadastroUsuario,
                             child: ClipOval(
@@ -206,31 +195,25 @@ class _LoginState extends State<Login> {
                           ),
                           //Caixa de texto nome
                           Visibility(
-                            //É um bool. True fica visível
-                            visible: _cadastroUsuario, //Por padrão é falso
+                            visible: _cadastroUsuario,
                             child: TextField(
                               controller: _controllerNome,
                               keyboardType: TextInputType.text,
                               decoration: const InputDecoration(
-                                hintText: "Nome",
-                                labelText: "Nome",
-                                suffixIcon: Icon(
-                                  Icons.person_outline,
-                                ),
-                              ),
+                                  hintText: "Nome",
+                                  labelText: "Nome",
+                                  suffixIcon: Icon(Icons.person_outline)),
                             ),
                           ),
-                          //Email
+
+                          //Caixa de texto email
                           TextField(
                             controller: _controllerEmail,
                             keyboardType: TextInputType.emailAddress,
                             decoration: const InputDecoration(
-                              hintText: "Email",
-                              labelText: "Email",
-                              suffixIcon: Icon(
-                                Icons.email_outlined,
-                              ),
-                            ),
+                                hintText: "Email",
+                                labelText: "Email",
+                                suffixIcon: Icon(Icons.mail_outline)),
                           ),
 
                           //Senha
@@ -241,24 +224,23 @@ class _LoginState extends State<Login> {
                             decoration: const InputDecoration(
                               hintText: "Senha",
                               labelText: "Senha",
-                              suffixIcon: Icon(
-                                Icons.lock_outline,
-                              ),
+                              suffixIcon: Icon(Icons.lock_outline),
                             ),
                           ),
 
-                          const SizedBox(height: 20),
+                          const SizedBox(
+                            height: 20,
+                          ),
 
                           //botão Login
                           Container(
-                            width: double.infinity, //Para ocupar o espaço total
+                            width: double.infinity,
                             child: ElevatedButton(
                               onPressed: () {
                                 _validarCampos();
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: PaletaCores.corPrimaria,
-                              ),
+                                primary: PaletaCores.corPrimaria),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 8,
@@ -274,18 +256,21 @@ class _LoginState extends State<Login> {
                           ),
                           Row(
                             children: [
-                              Text("Login"),
-                              Switch(
-                                value: _cadastroUsuario,
-                                onChanged: (bool valor) {
-                                  setState(() {
-                                    _cadastroUsuario = valor;
-                                  });
-                                },
+                              const Text(
+                                "Login",
                               ),
-                              Text("Cadastro"),
+                              Switch(
+                                  value: _cadastroUsuario,
+                                  onChanged: (bool valor) {
+                                    setState(() {
+                                      _cadastroUsuario = valor;
+                                    });
+                                  }),
+                              const Text(
+                                "Cadastro",
+                              ),
                             ],
-                          ),
+                          )
                         ],
                       ),
                     ),
