@@ -25,25 +25,25 @@ class _ListaMensagensState extends State<ListaMensagens> {
               child: Container(
             width: largura,
             color: Colors.orange,
-            child: Text("Lista mensagen"),
+            child: const Text("Lista mensagen"),
           )),
 
           //Caixa de texto
           Container(
-            padding: EdgeInsets.all(8),
+            padding: const EdgeInsets.all(8),
             color: PaletaCores.corFundoBarra,
             child: Row(
               children: [
                 //Caixa de texto arredondada
                 Expanded(
                     child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  margin: EdgeInsets.symmetric(horizontal: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  margin: const EdgeInsets.symmetric(horizontal: 8),
                   decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(40)),
                   child: Row(
-                    children: [
+                    children: const [
                       Icon(Icons.insert_emoticon),
                       SizedBox(
                         width: 4,
