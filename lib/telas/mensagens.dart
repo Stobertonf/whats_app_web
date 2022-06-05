@@ -12,9 +12,9 @@ class Mensagens extends StatefulWidget {
 }
 
 class _MensagensState extends State<Mensagens> {
-  late Usuario _usuarioDestinario;
+  late Usuario _usuarioDestinatario;
   _recuperarDadosIniciais() {
-    _usuarioDestinario = widget.usuarioDestinatario;
+    _usuarioDestinatario = widget.usuarioDestinatario;
   }
 
   @override
@@ -33,14 +33,29 @@ class _MensagensState extends State<Mensagens> {
               radius: 25,
               backgroundColor: Colors.grey,
               backgroundImage: CachedNetworkImageProvider(
-                _usuarioDestinario.urlImagem,
+                _usuarioDestinatario.urlImagem,
               ),
             ),
             const SizedBox(
               width: 8,
+            ),
+            Text(
+              _usuarioDestinatario.nome,
+              style: const TextStyle(color: Colors.white, fontSize: 16),
             )
           ],
         ),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.more_vert,
+            ),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: Container(),
       ),
     );
   }
