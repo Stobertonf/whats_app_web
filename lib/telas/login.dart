@@ -27,7 +27,7 @@ class _LoginState extends State<Login> {
   FirebaseStorage _storage = FirebaseStorage.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  _verificarUsuarioLogado() {
+  _verificarUsuarioLogado() async {
     User? usuarioLogado = _auth.currentUser;
 
     if (usuarioLogado != null) {
@@ -240,7 +240,7 @@ class _LoginState extends State<Login> {
                                 _validarCampos();
                               },
                               style: ElevatedButton.styleFrom(
-                                primary: PaletaCores.corPrimaria),
+                                  primary: PaletaCores.corPrimaria),
                               child: Padding(
                                 padding: const EdgeInsets.symmetric(
                                   vertical: 8,
