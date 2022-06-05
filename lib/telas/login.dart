@@ -28,7 +28,7 @@ class _LoginState extends State<Login> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   _verificarUsuarioLogado() async {
-    User? usuarioLogado = _auth.currentUser;
+   User? usuarioLogado = await _auth.currentUser;
 
     if (usuarioLogado != null) {
       Navigator.pushReplacementNamed(context, "/home");
@@ -120,7 +120,7 @@ class _LoginState extends State<Login> {
   }
 
   @override
-  void initState() {
+  void InitState() {
     super.initState();
     _verificarUsuarioLogado();
   }
