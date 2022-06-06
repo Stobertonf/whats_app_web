@@ -30,7 +30,11 @@ class _ListaMensagensState extends State<ListaMensagens> {
     if (textoMensagem.isNotEmpty) {
       String idUsuarioRemetente = _usuarioRemetente.idUsuario;
       Mensagem mensagem = Mensagem(
-          idUsuarioRemetente, textoMensagem, Timestamp.now().toString());
+        idUsuarioRemetente,
+        textoMensagem,
+        //Timestamp cria data/string única utilizando dia, data, mês ano e etc
+        Timestamp.now().toString(),
+      );
 
       //Salvar mensagem para remetente
       String idUsuarioDestinatario = _usuarioDestinatario.idUsuario;
@@ -38,6 +42,7 @@ class _ListaMensagensState extends State<ListaMensagens> {
     }
   }
 
+  //Salvar Mensagem
   _salvarMensagem(
       String idRemetente, String idDestinatario, Mensagem mensagem) {
     _firestore
@@ -46,9 +51,11 @@ class _ListaMensagensState extends State<ListaMensagens> {
         .collection(idDestinatario)
         .add(mensagem.toMap());
 
+    //Limpando as mensagens
     _controllerMensagem.clear();
   }
 
+  //Recuperando dados Iniciais
   _recuperarDadosInicias() {
     _usuarioRemetente = widget.usuarioRemetente;
     _usuarioDestinatario = widget.usuarioDestinatario;
