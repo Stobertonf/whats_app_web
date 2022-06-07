@@ -36,7 +36,7 @@ class _LoginState extends State<Login> {
   }
 
   _selecionarImagem() async {
-    //Selecionando o arquivo
+    //Selecionar arquivo
     FilePickerResult? resultado =
         await FilePicker.platform.pickFiles(type: FileType.image);
 
@@ -46,7 +46,9 @@ class _LoginState extends State<Login> {
     });
   }
 
+
   //Upload Imagem
+
   _uploadImagem(Usuario usuario) {
     Uint8List? arquivoSelecionado = _arquivoImagemSelecionado;
     if (arquivoSelecionado != null) {
@@ -55,8 +57,8 @@ class _LoginState extends State<Login> {
       UploadTask uploadTask = imagemPerfilRef.putData(arquivoSelecionado);
 
       uploadTask.whenComplete(() async {
-        String urlImagem = await uploadTask.snapshot.ref.getDownloadURL();
-        usuario.urlImagem = urlImagem;
+        String urImagem = await uploadTask.snapshot.ref.getDownloadURL();
+        usuario.urlImagem = urImagem;
 
         //Atualiza url e nome nos dados do usuário
         await _auth.currentUser?.updateDisplayName(usuario.nome);
@@ -64,6 +66,7 @@ class _LoginState extends State<Login> {
 
         final usuariosRef = _firestore.collection("usuarios");
         usuariosRef.doc(usuario.idUsuario).set(usuario.toMap()).then((value) {
+
           //Enviando rotas para a tela principal da app
           Navigator.pushReplacementNamed(context, "/home");
         });
@@ -91,6 +94,8 @@ class _LoginState extends State<Login> {
                   Usuario usuario = Usuario(idUsuario, nome, email);
                   _uploadImagem(usuario);
                 }
+
+
                 //print("Usuário cadastrado: $idUsuario");
               });
             } else {
@@ -102,10 +107,7 @@ class _LoginState extends State<Login> {
         } else {
           //Login
           await _auth
-              .signInWithEmailAndPassword(
-            email: email,
-            password: senha,
-          )
+              .signInWithEmailAndPassword(email: email, password: senha)
               .then((auth) {
             //tela principal
             Navigator.pushReplacementNamed(context, "/home");
@@ -115,12 +117,12 @@ class _LoginState extends State<Login> {
         print("Senha inválida");
       }
     } else {
-      print("E-mail inválido");
+      print("Email inválido");
     }
   }
 
   @override
-  void InitState() {
+  void initState() {
     super.initState();
     _verificarUsuarioLogado();
   }
@@ -129,6 +131,7 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
     double larguraTela = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Container(
         color: PaletaCores.corFundo,
@@ -178,6 +181,7 @@ class _LoginState extends State<Login> {
                                     ),
                             ),
                           ),
+
                           const SizedBox(
                             height: 8,
                           ),
@@ -185,16 +189,17 @@ class _LoginState extends State<Login> {
                           Visibility(
                             visible: _cadastroUsuario,
                             child: OutlinedButton(
-                              onPressed: _selecionarImagem,
-                              child: const Text("Selecionar Foto"),
-                            ),
+                                onPressed: _selecionarImagem,
+                                child: const Text("Selecionar Foto")),
                           ),
 
                           const SizedBox(
                             height: 8,
                           ),
+
                           //Caixa de texto nome
                           Visibility(
+
                             visible: _cadastroUsuario,
                             child: TextField(
                               controller: _controllerNome,
@@ -222,6 +227,7 @@ class _LoginState extends State<Login> {
                             controller: _controllerSenha,
                             keyboardType: TextInputType.text,
                             decoration: const InputDecoration(
+
                               hintText: "Senha",
                               labelText: "Senha",
                               suffixIcon: Icon(Icons.lock_outline),
