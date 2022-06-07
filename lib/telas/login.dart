@@ -29,8 +29,8 @@ class _LoginState extends State<Login> {
   FirebaseStorage _storage = FirebaseStorage.instance;
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  _verificaUsuarioLogado() async {
-    User? usuarioLogado = await _auth.currentUser;
+  _verificarUsuarioLogado() {
+    User? usuarioLogado = _auth.currentUser;
 
     if (usuarioLogado != null) {
       Navigator.pushReplacementNamed(context, "/home");
@@ -38,20 +38,17 @@ class _LoginState extends State<Login> {
   }
 
   _selecionarImagem() async {
-    //Selecionando o arquivo
+    //Selecionar arquivo
     FilePickerResult? resultado =
         await FilePicker.platform.pickFiles(type: FileType.image);
 
-    //Recuperando o arquivo
-
+    //Recuperar o arquivo
     setState(() {
       _arquivoImagemSelecionado = resultado?.files.single.bytes;
     });
   }
 
-  //Upload Imagem
-
-  _uploadImage(Usuario usuario) async {
+  _uploadImagem(Usuario usuario) {
     Uint8List? arquivoSelecionado = _arquivoImagemSelecionado;
     if (arquivoSelecionado != null) {
       Reference imagemPerfilRef =
@@ -59,18 +56,18 @@ class _LoginState extends State<Login> {
       UploadTask uploadTask = imagemPerfilRef.putData(arquivoSelecionado);
 
       uploadTask.whenComplete(() async {
-        String urlImagem = await uploadTask.snapshot.ref.getDownloadURL();
-        usuario.urlImagem = urlImagem;
+        String urImagem = await uploadTask.snapshot.ref.getDownloadURL();
+        usuario.urlImagem = urImagem;
 
-        //print("Link da imagem: $LinkImagem");
+        //Atualiza url e nome nos dados do usuário
+        await _auth.currentUser?.updateDisplayName(usuario.nome);
+        await _auth.currentUser?.updatePhotoURL(usuario.urlImagem);
 
         final usuariosRef = _firestore.collection("usuarios");
-        usuariosRef.doc("usuario.idUsuario").set(usuario.toMap()).then(
-          (value) {
-            //Enviando rotas para a tela principal da app
-            Navigator.pushReplacementNamed(context, "/home");
-          },
-        );
+        usuariosRef.doc(usuario.idUsuario).set(usuario.toMap()).then((value) {
+          //tela principal
+          Navigator.pushReplacementNamed(context, "/home");
+        });
       });
     }
   }
@@ -85,23 +82,17 @@ class _LoginState extends State<Login> {
         if (_cadastroUsuario) {
           if (_arquivoImagemSelecionado != null) {
             //Cadastro
-            if (nome.isNotEmpty && senha.length > 3) {
+            if (nome.isNotEmpty && nome.length >= 3) {
               await _auth
-                  .createUserWithEmailAndPassword(
-                email: email,
-                password: senha,
-              )
+                  .createUserWithEmailAndPassword(email: email, password: senha)
                   .then((auth) {
                 //Upload
-
                 String? idUsuario = auth.user?.uid;
                 if (idUsuario != null) {
                   Usuario usuario = Usuario(idUsuario, nome, email);
-                  _uploadImage(usuario);
+                  _uploadImagem(usuario);
                 }
-
-                //Recuperando
-                //print("Usuário cadastrado: $idUsuario");
+                //print("Usuario cadastrado: $idUsuario");
               });
             } else {
               print("Nome inválido, digite ao menos 3 caracteres");
@@ -111,13 +102,10 @@ class _LoginState extends State<Login> {
           }
         } else {
           //Login
-
           await _auth
-              .signInWithEmailAndPassword(
-            email: email,
-            password: senha,
-          )
+              .signInWithEmailAndPassword(email: email, password: senha)
               .then((auth) {
+            //tela principal
             Navigator.pushReplacementNamed(context, "/home");
           });
         }
@@ -125,21 +113,21 @@ class _LoginState extends State<Login> {
         print("Senha inválida");
       }
     } else {
-      print("E-mail inválido");
+      print("Email inválido");
     }
   }
 
   @override
-  void InitState() {
-    super.initState(
-        //_verificarUsuario();
-        );
+  void initState() {
+    super.initState();
+    _verificarUsuarioLogado();
   }
 
   @override
   Widget build(BuildContext context) {
     double alturaTela = MediaQuery.of(context).size.height;
     double larguraTela = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: Container(
         color: PaletaCores.corFundo,
@@ -157,16 +145,16 @@ class _LoginState extends State<Login> {
             Center(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
                   child: Card(
                     elevation: 4,
-                    shape: const RoundedRectangleBorder(
+                    shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
                         Radius.circular(10),
                       ),
                     ),
                     child: Container(
-                      padding: const EdgeInsets.all(40),
+                      padding: EdgeInsets.all(40),
                       width: 500,
                       child: Column(
                         children: [
@@ -189,29 +177,30 @@ class _LoginState extends State<Login> {
                                     ),
                             ),
                           ),
-                          const SizedBox(
+
+                          SizedBox(
                             height: 8,
                           ),
 
                           Visibility(
                             visible: _cadastroUsuario,
                             child: OutlinedButton(
-                              onPressed: _selecionarImagem,
-                              child: const Text("Selecionar Foto"),
-                            ),
+                                onPressed: _selecionarImagem,
+                                child: Text("Selecionar Foto")),
                           ),
 
-                          const SizedBox(
+                          SizedBox(
                             height: 8,
                           ),
+
                           //Caixa de texto nome
                           Visibility(
                             //É um bool. True fica visível
-                            visible: _cadastroUsuario, //Por padrão é falso
+                            visible: _cadastroUsuario,
                             child: TextField(
                               controller: _controllerNome,
                               keyboardType: TextInputType.text,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 hintText: "Nome",
                                 labelText: "Nome",
                                 suffixIcon: Icon(
@@ -224,13 +213,10 @@ class _LoginState extends State<Login> {
                           TextField(
                             controller: _controllerEmail,
                             keyboardType: TextInputType.emailAddress,
-                            decoration: const InputDecoration(
-                              hintText: "Email",
-                              labelText: "Email",
-                              suffixIcon: Icon(
-                                Icons.email_outlined,
-                              ),
-                            ),
+                            decoration: InputDecoration(
+                                hintText: "Email",
+                                labelText: "Email",
+                                suffixIcon: Icon(Icons.mail_outline)),
                           ),
 
                           //Senha
@@ -238,16 +224,15 @@ class _LoginState extends State<Login> {
                             obscureText: true,
                             controller: _controllerSenha,
                             keyboardType: TextInputType.text,
-                            decoration: const InputDecoration(
-                              hintText: "Senha",
-                              labelText: "Senha",
-                              suffixIcon: Icon(
-                                Icons.lock_outline,
-                              ),
-                            ),
+                            decoration: InputDecoration(
+                                hintText: "Senha",
+                                labelText: "Senha",
+                                suffixIcon: Icon(Icons.lock_outline)),
                           ),
 
-                          const SizedBox(height: 20),
+                          SizedBox(
+                            height: 20,
+                          ),
 
                           //botão Login
                           Container(
@@ -260,12 +245,12 @@ class _LoginState extends State<Login> {
                                 primary: PaletaCores.corPrimaria,
                               ),
                               child: Padding(
-                                padding: const EdgeInsets.symmetric(
+                                padding: EdgeInsets.symmetric(
                                   vertical: 8,
                                 ),
                                 child: Text(
                                   _cadastroUsuario ? "Cadastro" : "Login",
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontSize: 18,
                                   ),
                                 ),
