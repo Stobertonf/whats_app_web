@@ -77,6 +77,12 @@ class _ListaMensagensState extends State<ListaMensagens> {
   }
 
   @override
+  void dispose() {
+    _streamMensagens.cancel();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     _recuperarDadosInicias();
@@ -173,30 +179,31 @@ class _ListaMensagensState extends State<ListaMensagens> {
               children: [
                 //Caixa de texto arredondada
                 Expanded(
-                    child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(40)),
-                  child: Row(
-                    children: [
-                      const Icon(Icons.insert_emoticon),
-                      const SizedBox(
-                        width: 4,
-                      ),
-                      Expanded(
-                          child: TextField(
-                        controller: _controllerMensagem,
-                        decoration: const InputDecoration(
-                            hintText: "Digite uma mensagem",
-                            border: InputBorder.none),
-                      )),
-                      const Icon(Icons.attach_file),
-                      const Icon(Icons.camera_alt),
-                    ],
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    margin: const EdgeInsets.symmetric(horizontal: 8),
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(40)),
+                    child: Row(
+                      children: [
+                        const Icon(Icons.insert_emoticon),
+                        const SizedBox(
+                          width: 4,
+                        ),
+                        Expanded(
+                            child: TextField(
+                          controller: _controllerMensagem,
+                          decoration: const InputDecoration(
+                              hintText: "Digite uma mensagem",
+                              border: InputBorder.none),
+                        )),
+                        const Icon(Icons.attach_file),
+                        const Icon(Icons.camera_alt),
+                      ],
+                    ),
                   ),
-                )),
+                ),
 
                 //Botao Enviar
                 FloatingActionButton(
