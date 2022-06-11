@@ -1,19 +1,18 @@
 import '../modelos/usuario.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import '../componentes/lista_contatos.dart';
+import '../componentes/lista_conversas.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeMobile extends StatefulWidget {
   const HomeMobile({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomeMobileState createState() => _HomeMobileState();
 }
 
 class _HomeMobileState extends State<HomeMobile> {
-  // ignore: prefer_final_fields
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
@@ -63,8 +62,9 @@ class _HomeMobileState extends State<HomeMobile> {
         body: const SafeArea(
           child: TabBarView(
             children: [
-              Center(
-                child: Text("Conversas"),
+              Padding(
+                child: ListaConversas(),
+                padding: EdgeInsets.symmetric(horizontal: 8),
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
