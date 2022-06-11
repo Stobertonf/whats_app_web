@@ -8,13 +8,14 @@ class ListaContatos extends StatefulWidget {
   const ListaContatos({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _ListaContatosState createState() => _ListaContatosState();
 }
 
 class _ListaContatosState extends State<ListaContatos> {
   late String _idUsuarioLogado;
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   Future<List<Usuario>> _recuperarContatos() async {
     final usuarioRef = _firestore.collection("usuarios");
@@ -112,8 +113,11 @@ class _ListaContatosState extends State<ListaContatos> {
                   },
                 );
               }
+
               return const Center(
-                child: Text("Nenhum contato encontrado!"),
+                child: Text(
+                  "Nenhum contato encontrado!",
+                ),
               );
             }
         }

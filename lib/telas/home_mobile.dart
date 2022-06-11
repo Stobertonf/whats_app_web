@@ -1,17 +1,19 @@
 import '../modelos/usuario.dart';
 import 'package:flutter/material.dart';
-import '../componentes/lista_contatos.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import '../componentes/lista_contatos.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class HomeMobile extends StatefulWidget {
-  const HomeMobile({super.key});
+  const HomeMobile({Key? key}) : super(key: key);
 
   @override
-  State<HomeMobile> createState() => _HomeMobileState();
+  // ignore: library_private_types_in_public_api
+  _HomeMobileState createState() => _HomeMobileState();
 }
 
 class _HomeMobileState extends State<HomeMobile> {
+  // ignore: prefer_final_fields
   FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
@@ -36,7 +38,9 @@ class _HomeMobileState extends State<HomeMobile> {
                 await _auth.signOut();
                 Navigator.pushReplacementNamed(context, "/login");
               },
-              icon: const Icon(Icons.logout),
+              icon: const Icon(
+                Icons.logout,
+              ),
             ),
           ],
           bottom: const TabBar(
@@ -47,8 +51,12 @@ class _HomeMobileState extends State<HomeMobile> {
               fontWeight: FontWeight.bold,
             ),
             tabs: [
-              Tab(text: "Conversas"),
-              Tab(text: "Contatos"),
+              Tab(
+                text: "Conversas",
+              ),
+              Tab(
+                text: "Contatos",
+              ),
             ],
           ),
         ),
