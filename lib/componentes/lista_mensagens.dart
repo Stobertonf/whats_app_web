@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../modelos/conversa.dart';
 import '../modelos/mensagem.dart';
 import '../modelos/usuario.dart';
 import '../uteis/paleta_cores.dart';
@@ -24,6 +25,7 @@ class _ListaMensagensState extends State<ListaMensagens> {
   FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   TextEditingController _controllerMensagem = TextEditingController();
+  ScrollController _scrollController = ScrollController();
   late Usuario _usuarioRemetente;
   late Usuario _usuarioDestinatario;
 
@@ -41,10 +43,27 @@ class _ListaMensagensState extends State<ListaMensagens> {
       //Salvar mensagem para remetente
       String idUsuarioDestinatario = _usuarioDestinatario.idUsuario;
       _salvarMensagem(idUsuarioRemetente, idUsuarioDestinatario, mensagem);
+      Conversa conversaRementente = Conversa(
+          idUsuarioRemetente, //jamilton
+          idUsuarioDestinatario, // joao
+          mensagem.texto,
+          _usuarioDestinatario.nome,
+          _usuarioDestinatario.email,
+          _usuarioDestinatario.urlImagem);
+      _salvarConversa(conversaRementente);
 
       //Salvar mensagem para destinatário
       _salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, mensagem);
     }
+  }
+
+  _salvarConversa(Conversa conversa) {
+    _firestore
+        .collection("conversas")
+        .doc(conversa.idRemetente)
+        .collection("ultimas_mensagens")
+        .doc(conversa.idDestinatario)
+        .set(conversa.toMap());
   }
 
   _salvarMensagem(
@@ -78,6 +97,7 @@ class _ListaMensagensState extends State<ListaMensagens> {
 
   @override
   void dispose() {
+    _streamController.dispose();
     _streamMensagens.cancel();
     super.dispose();
   }
@@ -134,6 +154,7 @@ class _ListaMensagensState extends State<ListaMensagens> {
 
                       return Expanded(
                           child: ListView.builder(
+                              controller: _scrollController,
                               itemCount: querySnapshot.docs.length,
                               itemBuilder: (context, indice) {
                                 DocumentSnapshot mensagem =
