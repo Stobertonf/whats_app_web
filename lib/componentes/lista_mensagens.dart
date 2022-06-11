@@ -1,7 +1,9 @@
+import 'dart:async';
 import '../modelos/mensagem.dart';
 import '../modelos/usuario.dart';
 import '../uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ListaMensagens extends StatefulWidget {
@@ -25,6 +27,10 @@ class _ListaMensagensState extends State<ListaMensagens> {
   late Usuario _usuarioRemetente;
   late Usuario _usuarioDestinatario;
 
+  StreamController _streamController =
+      StreamController<QuerySnapshot>.broadcast();
+  late StreamSubscription _streamMensagens;
+
   _enviarMensagem() {
     String textoMensagem = _controllerMensagem.text;
     if (textoMensagem.isNotEmpty) {
@@ -47,6 +53,19 @@ class _ListaMensagensState extends State<ListaMensagens> {
         .add(mensagem.toMap());
 
     _controllerMensagem.clear();
+  }
+
+  _adicionarListenerMensagens() {
+    final stream = _firestore
+        .collection("mensagens")
+        .doc(_usuarioRemetente.idUsuario)
+        .collection(_usuarioDestinatario.idUsuario)
+        .orderBy("data", descending: false)
+        .snapshots();
+
+    _streamMensagens = stream.listen((dados) {
+      _streamController.add(dados);
+    });
   }
 
   _recuperarDadosInicias() {
