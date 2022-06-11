@@ -95,12 +95,17 @@ class _ListaMensagensState extends State<ListaMensagens> {
 
     _streamMensagens = stream.listen((dados) {
       _streamController.add(dados);
+      Timer(Duration(seconds: 1), () {
+        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+      });
     });
   }
 
   _recuperarDadosInicias() {
     _usuarioRemetente = widget.usuarioRemetente;
     _usuarioDestinatario = widget.usuarioDestinatario;
+
+    _adicionarListenerMensagens();
   }
 
   @override
@@ -122,9 +127,12 @@ class _ListaMensagensState extends State<ListaMensagens> {
 
     return Container(
       width: largura,
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage("imagens/bg.png"), fit: BoxFit.cover)),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("imagens/bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
       child: Column(
         children: [
           //Listagem de mensagens
@@ -137,11 +145,11 @@ class _ListaMensagensState extends State<ListaMensagens> {
                     return Expanded(
                       child: Center(
                         child: Column(
-                          children: [
-                            const Text(
+                          children: const [
+                            Text(
                               "Carregando dados",
                             ),
-                            const CircularProgressIndicator(),
+                            CircularProgressIndicator(),
                           ],
                         ),
                       ),
