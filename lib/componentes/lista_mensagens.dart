@@ -97,7 +97,7 @@ class _ListaMensagensState extends State<ListaMensagens> {
 
   @override
   void dispose() {
-    _streamController.dispose();
+    _scrollController.dispose();
     _streamMensagens.cancel();
     super.dispose();
   }
