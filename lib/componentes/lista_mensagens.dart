@@ -54,6 +54,14 @@ class _ListaMensagensState extends State<ListaMensagens> {
 
       //Salvar mensagem para destinatário
       _salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, mensagem);
+      Conversa conversaDestinatario = Conversa(
+          idUsuarioDestinatario, //joão
+          idUsuarioRemetente, //jamilton
+          mensagem.texto,
+          _usuarioRemetente.nome,
+          _usuarioRemetente.email,
+          _usuarioRemetente.urlImagem);
+      _salvarConversa(conversaDestinatario);
     }
   }
 
