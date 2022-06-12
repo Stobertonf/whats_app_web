@@ -209,7 +209,8 @@ class AreaLateralMensagens extends StatelessWidget {
                       radius: 20,
                       backgroundColor: Colors.grey,
                       backgroundImage: CachedNetworkImageProvider(
-                          usuarioDestinatario.urlImagem),
+                        usuarioDestinatario.urlImagem,
+                      ),
                     ),
                     const SizedBox(
                       width: 8,

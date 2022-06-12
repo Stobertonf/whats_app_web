@@ -1,4 +1,7 @@
 import 'dart:async';
+import 'package:provider/provider.dart';
+import 'package:whats_app_web/provider/conversa_provider.dart';
+
 import '../modelos/conversa.dart';
 import '../modelos/mensagem.dart';
 import '../modelos/usuario.dart';
@@ -93,12 +96,18 @@ class _ListaMensagensState extends State<ListaMensagens> {
         .orderBy("data", descending: false)
         .snapshots();
 
-    _streamMensagens = stream.listen((dados) {
-      _streamController.add(dados);
-      Timer(Duration(seconds: 1), () {
-        _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-      });
-    });
+    _streamMensagens = stream.listen(
+      (dados) {
+        _streamController.add(dados);
+        Timer(
+          Duration(seconds: 1),
+          () {
+            _scrollController
+                .jumpTo(_scrollController.position.maxScrollExtent);
+          },
+        );
+      },
+    );
   }
 
   _recuperarDadosInicias() {
@@ -106,6 +115,16 @@ class _ListaMensagensState extends State<ListaMensagens> {
     _usuarioDestinatario = widget.usuarioDestinatario;
 
     _adicionarListenerMensagens();
+  }
+
+  _atualizarListenerMensagens() {
+    Usuario? usuarioDestinatario =
+        context.watch<ConversaProvider>().usuarioDestinatario;
+
+    if (usuarioDestinatario != null) {
+      _usuarioDestinatario = usuarioDestinatario;
+      _recuperarDadosInicias();
+    }
   }
 
   @override
@@ -119,6 +138,13 @@ class _ListaMensagensState extends State<ListaMensagens> {
   void initState() {
     super.initState();
     _recuperarDadosInicias();
+    print("");
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies(); //Ciclo de vida de um StatefulWidget
+    _atualizarListenerMensagens();
   }
 
   @override
@@ -137,76 +163,77 @@ class _ListaMensagensState extends State<ListaMensagens> {
         children: [
           //Listagem de mensagens
           StreamBuilder(
-              stream: _streamController.stream,
-              builder: (context, snapshot) {
-                switch (snapshot.connectionState) {
-                  case ConnectionState.none:
-                  case ConnectionState.waiting:
-                    return Expanded(
-                      child: Center(
-                        child: Column(
-                          children: const [
-                            Text(
-                              "Carregando dados",
-                            ),
-                            CircularProgressIndicator(),
-                          ],
-                        ),
+            stream: _streamController.stream,
+            builder: (context, snapshot) {
+              switch (snapshot.connectionState) {
+                case ConnectionState.none:
+                case ConnectionState.waiting:
+                  return Expanded(
+                    child: Center(
+                      child: Column(
+                        children: const [
+                          Text(
+                            "Carregando dados",
+                          ),
+                          CircularProgressIndicator(),
+                        ],
+                      ),
+                    ),
+                  );
+                case ConnectionState.active:
+                case ConnectionState.done:
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text(
+                        "Erro ao carregar os dados!",
                       ),
                     );
-                  case ConnectionState.active:
-                  case ConnectionState.done:
-                    if (snapshot.hasError) {
-                      return const Center(
-                        child: Text(
-                          "Erro ao carregar os dados!",
-                        ),
-                      );
-                    } else {
-                      QuerySnapshot querySnapshot =
-                          snapshot.data as QuerySnapshot;
-                      List<DocumentSnapshot> listaMensagens =
-                          querySnapshot.docs.toList();
+                  } else {
+                    QuerySnapshot querySnapshot =
+                        snapshot.data as QuerySnapshot;
+                    List<DocumentSnapshot> listaMensagens =
+                        querySnapshot.docs.toList();
 
-                      return Expanded(
-                          child: ListView.builder(
-                              controller: _scrollController,
-                              itemCount: querySnapshot.docs.length,
-                              itemBuilder: (context, indice) {
-                                DocumentSnapshot mensagem =
-                                    listaMensagens[indice];
+                    return Expanded(
+                      child: ListView.builder(
+                        controller: _scrollController,
+                        itemCount: querySnapshot.docs.length,
+                        itemBuilder: (context, indice) {
+                          DocumentSnapshot mensagem = listaMensagens[indice];
 
-                                Alignment alinhamento = Alignment.bottomLeft;
-                                Color cor = Colors.white;
+                          Alignment alinhamento = Alignment.bottomLeft;
+                          Color cor = Colors.white;
 
-                                if (_usuarioRemetente.idUsuario ==
-                                    mensagem["idUsuario"]) {
-                                  alinhamento = Alignment.bottomRight;
-                                  cor = const Color(
-                                    0xffd2ffa5,
-                                  );
-                                }
+                          if (_usuarioRemetente.idUsuario ==
+                              mensagem["idUsuario"]) {
+                            alinhamento = Alignment.bottomRight;
+                            cor = const Color(
+                              0xffd2ffa5,
+                            );
+                          }
 
-                                Size largura =
-                                    MediaQuery.of(context).size * 0.8;
+                          Size largura = MediaQuery.of(context).size * 0.8;
 
-                                return Align(
-                                  alignment: alinhamento,
-                                  child: Container(
-                                    constraints: BoxConstraints.loose(largura),
-                                    decoration: BoxDecoration(
-                                        color: cor,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(8))),
-                                    padding: const EdgeInsets.all(16),
-                                    margin: const EdgeInsets.all(6),
-                                    child: Text(mensagem["texto"]),
-                                  ),
-                                );
-                              }));
-                    }
-                }
-              }),
+                          return Align(
+                            alignment: alinhamento,
+                            child: Container(
+                              constraints: BoxConstraints.loose(largura),
+                              decoration: BoxDecoration(
+                                  color: cor,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(8))),
+                              padding: const EdgeInsets.all(16),
+                              margin: const EdgeInsets.all(6),
+                              child: Text(mensagem["texto"]),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  }
+              }
+            },
+          ),
 
           //Caixa de texto
           Container(
