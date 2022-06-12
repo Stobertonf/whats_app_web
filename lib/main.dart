@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:whats_app_web/rotas.dart';
@@ -10,7 +11,14 @@ final ThemeData temaPadrao = ThemeData(
   accentColor: PaletaCores.corDestaque,
 );
 
-void main() {
+void main(){
+
+  User? usuarioFirebase = FirebaseAuth.instance.currentUser;
+  String urlInicial = "/";
+  if( usuarioFirebase != null ){
+    urlInicial = "/home";
+  }
+
   runApp(
     MaterialApp(
       title: "WhatsApp Web",
