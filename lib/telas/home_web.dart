@@ -48,6 +48,7 @@ class _HomeWebState extends State<HomeWeb> {
         child: Stack(
           children: [
             Positioned(
+              top: 0,
               child: Container(
                 width: largura,
                 height: altura * 0.2, //Multiplicando por 20% da altura total
@@ -139,6 +140,28 @@ class AreaLateralConversas extends StatelessWidget {
           ),
 
           //Barra de pesquisa
+          Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(100),
+            ),
+            child: Row(
+              children: [
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.search),
+                ),
+                const Expanded(
+                  child: TextField(
+                    decoration: InputDecoration.collapsed(
+                      hintText: "Pesquisar uma Conversa",
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
