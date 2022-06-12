@@ -1,7 +1,11 @@
 import 'dart:math';
+import 'package:cached_network_image/cached_network_image.dart';
+
+import '../modelos/usuario.dart';
 import '../uteis/responsivo.dart';
 import '../uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class HomeWeb extends StatefulWidget {
   const HomeWeb({super.key});
@@ -11,6 +15,27 @@ class HomeWeb extends StatefulWidget {
 }
 
 class _HomeWebState extends State<HomeWeb> {
+  late Usuario _usuarioLogado;
+  FirebaseAuth _auth = FirebaseAuth.instance;
+
+  _recuperarDadosUsuarioLogado() {
+    User? usuarioLogado = _auth.currentUser;
+    if (usuarioLogado != null) {
+      String idUsuario = usuarioLogado.uid;
+      String? nome = usuarioLogado.displayName ?? "";
+      String? email = usuarioLogado.email ?? "";
+      String? urlImagem = usuarioLogado.photoURL ?? "";
+
+      _usuarioLogado = Usuario(idUsuario, nome, email, urlImagem: urlImagem);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _recuperarDadosUsuarioLogado();
+  }
+
   @override
   Widget build(BuildContext context) {
     final isWeb = Responsivo.isWeb(context);
@@ -35,14 +60,18 @@ class _HomeWebState extends State<HomeWeb> {
               right: isWeb ? largura * 0.05 : 0,
               bottom: isWeb ? altura * 0.05 : 0,
               child: Row(
-                children: const [
+                children: [
                   Expanded(
                     flex: 4,
-                    child: AreaLateralConversas(),
+                    child: AreaLateralConversas(
+                      usuarioLogado: _usuarioLogado,
+                    ),
                   ),
                   Expanded(
                     flex: 10,
-                    child: AreaLateralConversas(),
+                    child: AreaLateralConversas(
+                      usuarioLogado: _usuarioLogado,
+                    ),
                   ),
                 ],
               ),
@@ -55,14 +84,63 @@ class _HomeWebState extends State<HomeWeb> {
 }
 
 class AreaLateralConversas extends StatelessWidget {
-  const AreaLateralConversas({super.key});
+  final Usuario usuarioLogado;
+
+  const AreaLateralConversas({
+    Key? key,
+    required this.usuarioLogado,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 300,
-      height: 300,
-      color: Colors.orange,
+      decoration: const BoxDecoration(
+        color: PaletaCores.corFundoBarraClaro,
+        border: Border(
+          right: BorderSide(
+            color: PaletaCores.corFundo,
+          ),
+        ),
+      ),
+      child: Column(
+        children: [
+          //Barra Superiro
+          Container(
+            padding: const EdgeInsets.all(8),
+            color: PaletaCores.corFundoBarraClaro,
+            child: Row(
+              children: [
+                CircleAvatar(
+                  radius: 25,
+                  backgroundColor: Colors.grey,
+                  backgroundImage: CachedNetworkImageProvider(
+                    usuarioLogado.urlImagem,
+                  ),
+                ),
+                const Spacer(), //Empurra os itens para o final
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.message,
+                  ),
+                ),
+                IconButton(
+                  //Deslogar o Usuário
+                  onPressed: () async {
+                    await FirebaseAuth.instance.signOut();
+                    Navigator.pushReplacementNamed(context, "/login");
+                  },
+                  icon: const Icon(
+                    Icons.logout,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          //Barra de pesquisa
+        ],
+      ),
     );
   }
 }
