@@ -12,6 +12,19 @@ class Responsivo extends StatelessWidget {
     this.tablet,
   }) : super(key: key);
 
+  static bool isMobile(BuildContext context) {
+    return MediaQuery.of(context).size.width < 800;
+  }
+
+  static bool isTable(BuildContext context) {
+    return MediaQuery.of(context).size.width >= 800 &&
+        MediaQuery.of(context).size.width < 1200;
+  }
+
+  static bool isWeb(BuildContext context) {
+    return MediaQuery.of(context).size.width >= 1200;
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {

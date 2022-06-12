@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import '../uteis/responsivo.dart';
 import '../uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
 
@@ -13,6 +13,7 @@ class HomeWeb extends StatefulWidget {
 class _HomeWebState extends State<HomeWeb> {
   @override
   Widget build(BuildContext context) {
+    final isWeb = Responsivo.isWeb(context);
     final largura = MediaQuery.of(context).size.width;
     final altura = MediaQuery.of(context).size.height;
 
@@ -29,10 +30,10 @@ class _HomeWebState extends State<HomeWeb> {
               ),
             ),
             Positioned(
-              top: 20,
-              left: 20,
-              right: 20,
-              bottom: 20,
+              top: isWeb ? altura * 0.05 : 0,
+              left: isWeb ? largura * 0.05 : 0,
+              right: isWeb ? largura * 0.05 : 0,
+              bottom: isWeb ? altura * 0.05 : 0,
               child: Row(
                 children: const [
                   Expanded(
