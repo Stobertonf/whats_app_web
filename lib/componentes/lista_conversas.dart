@@ -1,6 +1,9 @@
 import 'dart:async';
+import '../uteis/responsivo.dart';
 import '../modelos/usuario.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../provider/conversa_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -61,6 +64,8 @@ class _ListaConversasState extends State<ListaConversas> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = Responsivo.isMobile(context);
+
     return StreamBuilder(
       stream: _streamController.stream,
       builder: (context, snapshot) {
@@ -111,8 +116,13 @@ class _ListaConversasState extends State<ListaConversas> {
 
                   return ListTile(
                     onTap: () {
-                      Navigator.pushNamed(context, "/mensagens",
-                          arguments: usuario);
+                      if (isMobile) {
+                        Navigator.pushNamed(context, "/mensagens",
+                            arguments: usuario);
+                      } else {
+                        context.read<ConversaProvider>().usuarioDestinatario =
+                            usuario;
+                      }
                     },
                     leading: CircleAvatar(
                       radius: 25,
