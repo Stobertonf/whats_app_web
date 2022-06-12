@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:whats_app_web/componentes/lista_conversas.dart';
 
 import '../modelos/usuario.dart';
 import '../uteis/responsivo.dart';
@@ -162,8 +163,33 @@ class AreaLateralConversas extends StatelessWidget {
               ],
             ),
           ),
+
+          //Lista de Conversas
+          Expanded(
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: const ListaConversas(),
+            ),
+          ),
         ],
       ),
+    );
+  }
+}
+
+class AreaLateralMensagens extends StatelessWidget {
+  const AreaLateralMensagens({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final largura = MediaQuery.of(context).size.width;
+    final altura = MediaQuery.of(context).size.height;
+
+    return Container(
+      width: largura,
+      height: altura,
+      color: PaletaCores.corFundoBarraClaro,
     );
   }
 }
