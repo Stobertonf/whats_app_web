@@ -1,18 +1,17 @@
 import 'dart:math';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:whats_app_web/componentes/lista_conversas.dart';
-
 import '../modelos/usuario.dart';
 import '../uteis/responsivo.dart';
 import '../uteis/paleta_cores.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:whats_app_web/componentes/lista_conversas.dart';
 
 class HomeWeb extends StatefulWidget {
-  const HomeWeb({super.key});
+  const HomeWeb({Key? key}) : super(key: key);
 
   @override
-  State<HomeWeb> createState() => _HomeWebState();
+  _HomeWebState createState() => _HomeWebState();
 }
 
 class _HomeWebState extends State<HomeWeb> {
@@ -69,12 +68,10 @@ class _HomeWebState extends State<HomeWeb> {
                       usuarioLogado: _usuarioLogado,
                     ),
                   ),
-                  Expanded(
+                  const Expanded(
                     flex: 10,
-                    child: AreaLateralConversas(
-                      usuarioLogado: _usuarioLogado,
-                    ),
-                  ),
+                    child: AreaLateralMensagens(),
+                  )
                 ],
               ),
             ),
@@ -100,16 +97,17 @@ class AreaLateralConversas extends StatelessWidget {
         color: PaletaCores.corFundoBarraClaro,
         border: Border(
           right: BorderSide(
+            width: 1,
             color: PaletaCores.corFundo,
           ),
         ),
       ),
       child: Column(
         children: [
-          //Barra Superiro
+          //Barra Superior
           Container(
             padding: const EdgeInsets.all(8),
-            color: PaletaCores.corFundoBarraClaro,
+            color: PaletaCores.corFundoBarra,
             child: Row(
               children: [
                 CircleAvatar(
@@ -119,7 +117,7 @@ class AreaLateralConversas extends StatelessWidget {
                     usuarioLogado.urlImagem,
                   ),
                 ),
-                const Spacer(), //Empurra os itens para o final
+                const Spacer(),
                 IconButton(
                   onPressed: () {},
                   icon: const Icon(
