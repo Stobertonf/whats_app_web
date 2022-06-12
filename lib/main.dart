@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
 import 'package:whats_app_web/rotas.dart';
@@ -18,8 +19,13 @@ void main() {
     urlInicial = "/home";
   }
 
+  //Atalhos
+  final atalhos = WidgetsApp.defaultShortcuts;
+  atalhos[LogicalKeySet(LogicalKeyboardKey.space)] = const ActivateIntent();
+
   runApp(
     MaterialApp(
+      shortcuts: atalhos,
       title: "WhatsApp Web",
       debugShowCheckedModeBanner: false,
       // home: Login(),
