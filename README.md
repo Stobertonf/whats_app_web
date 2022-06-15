@@ -31,6 +31,4 @@
   <img src=https://i.ibb.co/s3bsL0P/Home-Mobile.jpg width="40%" />
   <img src= https://i.ibb.co/frFwHJ9/Home-Web-1.jpg width="40%" />
  
- 
- 
 </p> 
